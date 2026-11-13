@@ -1,5 +1,12 @@
 #include <iostream>
 
+#include "user.h"
+
 int main() {
-  std::cout << "Hello, World" << std::endl;
+  UserList user_list;
+  createUserList(user_list);
+
+  std::cout << "User list terinisialisasi" << std::endl;
+
+  return 0;
 }
