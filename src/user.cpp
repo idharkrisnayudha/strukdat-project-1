@@ -33,7 +33,7 @@ UserAddress searchUserByUsername(UserList list, std::string username) {
     current_position = current_position->next;
   }
 
-  return current_position;
+  return user_position;
 }
 
 bool isUserExistByUsername(UserList list, std::string username) {
@@ -49,12 +49,12 @@ UserAddress createUserElement(std::string username, std::string name, std::strin
   return newUserElement;
 }
 
-void registeUser(UserList& list, std::string username, std::string name, std::string account_type) {
+void registerUser(UserList& list, std::string username, std::string name) {
   UserAddress current_position;
   UserAddress new_user;
 
   if(!isUserExistByUsername(list, username)) {
-    new_user = createUserElement(username, name, account_type);
+    new_user = createUserElement(username, name, "free");
 
     if(isUserListEmpty(list)) {
       list.first = new_user;
@@ -145,5 +145,19 @@ void dumpUserList(UserList list) {
 
     index = index + 1;
     current_position = current_position->next;
+  }
+}
+
+void updateUserAccountType(UserList& list, std::string username, std::string new_account_type) {
+  UserAddress user_target;
+  user_target = searchUserByUsername(list, username);
+  if (user_target != nullptr) {
+    if (new_account_type == "free" || new_account_type == "premium") {
+      user_target->info.account_type = new_account_type;
+    } else {
+      std::cout << "Tidak bisa mengubah tipe akun user '" << username << "' karena tipe '" << new_account_type << "' invalid!" << std::endl;
+    }
+  } else {
+    std::cout << "Tidak bisa mengubah tipe akun user karena user '" << username << "' tidak ditemukan!" << std::endl;
   }
 }
