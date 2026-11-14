@@ -30,6 +30,14 @@ struct UserList {
 void createUserList(UserList& list);
 
 /**
+ * Sebuah Procedure untuk mengubah "name"
+ * pada sebuah user.
+ * I.S: sebuah refrence ke UserList, username, dan name
+ * F.S: perubahan "name" pada sebuah user
+ */
+void updateUserName(UserList& list, std::string username, std::string name);
+
+/**
  * Procedure berguna untuk menghapus semua user
  * pada list. Dengan cara mengeluarkan dan
  * delete user.
