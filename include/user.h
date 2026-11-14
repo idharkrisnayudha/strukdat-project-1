@@ -30,6 +30,15 @@ struct UserList {
 void createUserList(UserList& list);
 
 /**
+ * Procedure berguna untuk menghapus semua user
+ * pada list. Dengan cara mengeluarkan dan
+ * delete user.
+ * I.S: refrence ke UserList
+ * F.S: list menjadi kosong
+ */
+void freeUserList(UserList& list);
+
+/**
  * Sebuah function yang berguna untuk mengecek
  * apakah sebuah UserList kosong atau tidak.
  * mengembalikan true jika kosong, dan
@@ -80,11 +89,27 @@ void registeUser(UserList& list, std::string username, std::string name, std::st
 void removeUser(UserList& list, std::string username, UserAddress& user_removed);
 
 /**
+ * Sebuah procedure yang digunakan untuk mengeluarkan
+ * user yang posisinya pertama pada list.
+ * I.S: refrence ke UserList dan refrence ke user yang dikeluarkan
+ * F.S: user dengan posisi pertama akan keluar dari list
+ */
+void removeFirstUserOnList(UserList& list, UserAddress& user_removed);
+
+/**
  * Sebuah procedure yang berguna untuk mengeluarkan
  * user dari list, dan mendealokasikan user
  * I.S: refrence UserList dan username
  * F.S: Mengeluarkan user dari list, dan mendealokasikan user
  */
 void deactivateUser(UserList& list, std::string username);
+
+/**
+ * Sebuah procedure yang berguna untuk menampilkan
+ * informasi user yang ada pada list.
+ * I.S: UserList
+ * F.S: Menampilkan informasi user pada list
+ */
+void dumpUserList(UserList list);
 
 #endif // INCLUDE_USER_H_

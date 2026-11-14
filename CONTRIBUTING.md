@@ -30,7 +30,6 @@ Menggunakan **camelCase** (sama seperti penamaan tipe, tetapi huruf paling depan
 ## 4. Penggunaan Macro Header Guard
 * Penggunaan `#pragma once` **dilarang keras**.
 * Wajib menggunakan `#ifndef`, `#define`, dan `#endif` dengan format `<PATH>_<NAMA_FILE>_H_`.
-* Sesuai aturan tanpa komentar di dalam skrip kode, jangan tambahkan komentar setelah `#endif`.
 
 Contoh penulisan untuk file `include/user.h`:
 ```cpp
@@ -45,7 +44,7 @@ typedef struct ElementUser* UserAddress;
 
 void createUser(UserAddress &user_address);
 
-#endif
+#endif // INCLUDE_USER_H_
 
 ```
 

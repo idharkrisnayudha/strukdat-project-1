@@ -6,6 +6,15 @@ void createUserList(UserList& list) {
   list.first = nullptr;
 }
 
+void freeUserList(UserList& list) {
+  UserAddress user_temp;
+
+  while(!isUserListEmpty(list)) {
+    removeFirstUserOnList(list, user_temp);
+    delete user_temp;
+  }
+}
+
 bool isUserListEmpty(UserList list) {
   return list.first == nullptr;
 }
@@ -93,6 +102,18 @@ void removeUser(UserList& list, std::string username, UserAddress& user_removed)
   }
 }
 
+void removeFirstUserOnList(UserList& list, UserAddress& user_removed) {
+  UserAddress targeted_user;
+
+  if(!isUserListEmpty(list)) {
+    targeted_user = list.first;
+    list.first = list.first->next;
+    targeted_user->next = nullptr;
+
+    user_removed = targeted_user;
+  }
+}
+
 void deactivateUser(UserList& list, std::string username) {
   UserAddress user_target;
 
@@ -100,8 +121,29 @@ void deactivateUser(UserList& list, std::string username) {
 
   if(user_target != nullptr) {
     delete user_target;
-    user_target = nullptr;
   } else {
     std::cout << "Tidak bisa deaktivasi user karena user '" << username << "' tidak ditemukan!" << std::endl;
+  }
+}
+
+void dumpUserList(UserList list) {
+  UserAddress current_position;
+  int index;
+
+  index = 1;
+  current_position = list.first;
+
+  while(current_position != nullptr) {
+    std::cout << "# User ke-" << index << std::endl;
+    std::cout << "Username: " << current_position->info.username << std::endl;
+    std::cout << "Nama: " << current_position->info.name << std::endl;
+    std::cout << "Tipe Akun: " << current_position->info.account_type << std::endl;
+
+    if(current_position->next != nullptr) {
+      std::cout << std::endl;
+    }
+
+    index = index + 1;
+    current_position = current_position->next;
   }
 }
