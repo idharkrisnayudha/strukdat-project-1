@@ -74,10 +74,10 @@ UserAddress createUserElement(std::string username, std::string name, std::strin
  * UserElement jika username belum digunakan,
  * dan melakukan insert ke bagian terakhir
  * list.
- * I.S: refrence UserList, username, name, dan account_type
+ * I.S: refrence UserList, username, dan name
  * F.S: bertambahnya user baru jika username belum terpakai
  */
-void registeUser(UserList& list, std::string username, std::string name, std::string account_type);
+void registerUser(UserList& list, std::string username, std::string name);
 
 /**
  * Sebuah procedure yang berguna untuk mengeluarkan
@@ -111,5 +111,12 @@ void deactivateUser(UserList& list, std::string username);
  * F.S: Menampilkan informasi user pada list
  */
 void dumpUserList(UserList list);
+
+/**
+ * sebuah procedure yang berguna untuk mengubah tipe akun user
+ * I.S: UserList, username, dan new_account_type
+ * F.S: tipe akun user akan berubah menjadi new_account_type
+ */
+void updateUserAccountType(UserList& list, std::string username, std::string new_account_type);
 
 #endif // INCLUDE_USER_H_
