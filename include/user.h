@@ -70,4 +70,21 @@ UserAddress createUserElement(std::string username, std::string name, std::strin
  */
 void registeUser(UserList& list, std::string username, std::string name, std::string account_type);
 
+/**
+ * Sebuah procedure yang berguna untuk mengeluarkan
+ * user dari list, dan mengembalikan UserAddress
+ * untuk digunakan atau dihancurkan
+ * I.S: refrence UserList, username, dan refrence UserAddress
+ * F.S: Mengeluarkan user dari list, dan mengembalikan user lewat user_removed
+ */
+void removeUser(UserList& list, std::string username, UserAddress& user_removed);
+
+/**
+ * Sebuah procedure yang berguna untuk mengeluarkan
+ * user dari list, dan mendealokasikan user
+ * I.S: refrence UserList dan username
+ * F.S: Mengeluarkan user dari list, dan mendealokasikan user
+ */
+void deactivateUser(UserList& list, std::string username);
+
 #endif // INCLUDE_USER_H_

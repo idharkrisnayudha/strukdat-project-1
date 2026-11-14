@@ -62,3 +62,46 @@ void registeUser(UserList& list, std::string username, std::string name, std::st
     std::cout << "Tidak dapat melakukan register karena username '" << username << "' telah digunakan!" << std::endl;
   }
 }
+
+void removeUser(UserList& list, std::string username, UserAddress& user_removed) {
+  UserAddress previous_position, current_position;
+  UserAddress targeted_user;
+
+  user_removed = nullptr;
+  previous_position = nullptr;
+  current_position = list.first;
+  
+  while(current_position != nullptr && current_position->info.username != username) {
+    previous_position = current_position;
+    current_position = current_position->next;
+  }
+
+  if(current_position != nullptr) {
+    if(previous_position == nullptr) {
+      targeted_user = list.first;
+      list.first = list.first->next;
+
+      targeted_user->next = nullptr;
+      user_removed = targeted_user;
+    } else {
+      targeted_user = current_position;
+      previous_position = current_position->next;
+
+      targeted_user->next = nullptr;
+      user_removed = targeted_user;
+    }
+  }
+}
+
+void deactivateUser(UserList& list, std::string username) {
+  UserAddress user_target;
+
+  removeUser(list, username, user_target);
+
+  if(user_target != nullptr) {
+    delete user_target;
+    user_target = nullptr;
+  } else {
+    std::cout << "Tidak bisa deaktivasi user karena user '" << username << "' tidak ditemukan!" << std::endl;
+  }
+}
