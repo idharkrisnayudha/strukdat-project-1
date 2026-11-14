@@ -15,6 +15,17 @@ void freeUserList(UserList& list) {
   }
 }
 
+void updateUserName(UserList& list, std::string username, std::string name) {
+  UserAddress current_position;
+  
+  current_position = searchUserByUsername(list, username);
+  if(current_position != nullptr) {
+    current_position->info.name = name;
+  } else {
+    std::cout << "Tidak bisa mengubah nama user karena user '" << username << "' tidak ditemukan!" << std::endl;
+  }
+}
+
 bool isUserListEmpty(UserList list) {
   return list.first == nullptr;
 }
