@@ -68,7 +68,7 @@ void initTree(TreeNode* &root_node);
 
 ## 5. Cara Build Proyek
 
-### Menggunakan CMake (VS Code / Terminal)
+### Menggunakan CMake (VS Code / Zed / Terminal)
 
 1. Buat direktori build: `mkdir build && cd build`
 2. Konfigurasi CMake: `cmake ..`
