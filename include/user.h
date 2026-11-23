@@ -1,6 +1,8 @@
 #ifndef INCLUDE_USER_H_
 #define INCLUDE_USER_H_
 
+#include "song.h"
+
 #include <string>
 
 struct UserElement;
@@ -10,11 +12,12 @@ struct UserInfoType {
   std::string username;
   std::string name;
   std::string account_type;
-};
+  };
 
 struct UserElement {
   UserInfoType info;
   UserAddress next;
+  SongList playlist;
 };
 
 struct UserList {

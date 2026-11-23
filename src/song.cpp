@@ -2,105 +2,130 @@
 
 #include <iostream>
 
-void createSongList(SongList& list) {
-  list.first = nullptr;
+void createSongList(SongList &list) {
+    list.first = nullptr;
 }
 
-SongAddress createSongelement(SongAddress& song, std::string Id, std::string Title, std::string Artist, std::string Genret, int Duration) {
-  SongAddress newSong = new SongElement;
-  newSong->info.Id = Id;
-  newSong->info.Title = Title;
-  newSong->info.Artist = Artist;
-  newSong->info.Genret = Genret;
-  newSong->info.Duration = Duration;
-  song->next = nullptr;
-  return newSong;
+SongAddress createSong(std::string id, std::string title, std::string artist, std::string genre, int duration) {
+  SongAddress newsongelement = new SongElement;
+  newsongelement->info.id = id;
+  newsongelement->info.title = title;
+  newsongelement->info.artist = artist;
+  newsongelement->info.genre = genre;
+  newsongelement->info.duration = duration;
+  newsongelement->next = nullptr;
+  return newsongelement;
 }
 
-void freeSongList(SongList& list) {
-  SongAddress song_temp;
+void insertLastSong(SongList &list, SongAddress song) {
+    if (song == nullptr) return;
+    song->next = nullptr;
 
-  while(!isSongListEmpty(list)) {
-    song_temp = list.first;
-    list.first = list.first->next;
-    delete song_temp;
-  }
-}
-
-void insertSong(SongList& list, std::string Id, std::string Title, std::string Artist, std::string Genret, int Duration) {
-  SongAddress newSong = new SongElement;
-  newSong->info.Id = Id;
-  newSong->info.Title = Title;
-  newSong->info.Artist = Artist;
-  newSong->info.Genret = Genret;
-  newSong->info.Duration = Duration;
-  newSong->next = nullptr;
-
-  if (list.first == nullptr) {
-    list.first = newSong;
-  } else {
-    SongAddress current = list.first;
-    while (current->next != nullptr) {
-      current = current->next;
+    if (list.first == nullptr) {
+        list.first = song;
+    } else {
+        SongAddress P = list.first;
+        while (P->next != nullptr) {
+            P = P->next;
+        }
+        P->next = song;
     }
-    current->next = newSong;
-  }
 }
 
-void removeSong(SongList& list, std::string Id) {
+SongAddress searchSong(SongList list, std::string id) {
+    SongAddress P = list.first;
+    while (P != nullptr) {
+        if (P->info.id == id) {
+            return P;
+        }
+        P = P->next;
+    }
+    return nullptr;
+}
+
+void deleteSong(SongList list, std::string id) {
   if (list.first == nullptr) return;
 
-  if (list.first->info.Id == Id) {
-    SongAddress toDelete = list.first;
-    list.first = list.first->next;
-    delete toDelete;
-    return;
-  }
+    SongAddress P = list.first;
+    SongAddress prev = nullptr;
 
-  SongAddress current = list.first;
-  while (current->next != nullptr && current->next->info.Id != Id) {
-    current = current->next;
-  }
-
-  if (current->next != nullptr) {
-    SongAddress toDelete = current->next;
-    current->next = current->next->next;
-    delete toDelete;
-  }
-}
-
-void dumpSongList(const SongList& list) {
-  SongAddress current = list.first;
-  while (current != nullptr) {
-    std::cout << "Id: " << current->info.Id << ", Title: " << current->info.Title
-              << ", Artist: " << current->info.Artist << ", Genre: " << current->info.Genret
-              << ", Duration: " << current->info.Duration << std::endl;
-    current = current->next;
-  }
-}
-
-SongAddress searchSongByTitle(const SongList& list, std::string Title) {
-  SongAddress current = list.first;
-  while (current != nullptr) {
-    if (current->info.Title == Title) {
-      return current;
+    while (P != nullptr && P->info.id != id) {
+        prev = P;
+        P = P->next;
     }
-    current = current->next;
-  }
-  return nullptr;
+
+    if (P != nullptr) {
+        if (prev == nullptr) {
+            list.first = P->next;
+        } else {
+            prev->next = P->next;
+        }
+        P->next = nullptr;
+    }
 }
 
-void playSong(const SongList& list, std::string Title) {
-  SongAddress song;
-  song = searchSongByTitle(list, Title);
-  if (song != nullptr) {
-    std::cout << "Playing song: " << song->info.Title << " by " << song->info.Artist << std::endl;
+void emptySongList(SongList &list) {
+  SongAddress P = list.first;
+  while (P != nullptr) {
+      SongAddress temp = P;
+      P = P->next;
+      temp->next = nullptr;
+  }
+  list.first = nullptr;
+} 
+
+void createBSTList(BSTAddress &root) {
+    root = nullptr;
+}
+
+BSTAddress createBST(std::string id, SongAddress song) {
+    BSTAddress newnode = new BSTNode;
+    newnode->id = id;
+    newnode->playcount = 0;
+    newnode->playing_song = song;
+    newnode->left = nullptr;
+    newnode->right = nullptr;
+    return newnode;
+}
+
+void insertBST(BSTAddress &root, BSTAddress newnode) {
+  if (newnode == nullptr){
+    return nullptr;
+  }
+  if (root == nullptr) {
+    root = newnode;
+  } else if (newnode->id < root->id) {
+    insertBST(root->left, newnode);
+  } else if (newnode->id > root->id) {
+    insertBST(root->right, newnode);
+  }
+}
+
+BSTAddress searchBST(BSTAddress root, std::string id) {
+  if (root == nullptr || root->id == id) {
+    return root;
+  } else if (id < root->id) {
+    return searchBST(root->left, id);
   } else {
-    std::cout << "Song with Title " << Title << " not found." << std::endl;
+    return searchBST(root->right, id);
   }
 }
 
-bool isSongListEmpty(const SongList& list) {
-  return list.first == nullptr;
+void playSong(BSTAddress root, std::string id) {
+  BSTAddress target = searchBST(root, id);
+  if (target != nullptr) {
+    target->playcount++;
+    if (target->playing_song != nullptr) {
+      std::cout << "Memutar: " << target->playing_song->info.title << " - " << target->playing_song->info.artist << " (Total diputar: " << target->playcount << ")" << std::endl;
+    } else {
+      std::cout << "Memutar lagu ID " << target->id << " (Total diputar: " << target->playcount << ")" << std::endl;
+    }
+  } else {
+    std::cout << "Lagu dengan ID " << id << " tidak ditemukan di katalog." << std::endl;
+  }
+  // note: ini katanya mau bener bener putar lagu kan jo?
 }
 
+void showTrending5(BSTAddress root, SongAddress){
+  hehe ga paham ini mah
+}
