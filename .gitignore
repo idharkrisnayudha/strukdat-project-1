@@ -3,6 +3,7 @@ build/
 bin/
 obj/
 CMakeFiles/
+.cache/
 
 # Files
 CMakeCache.txt
