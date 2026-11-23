@@ -2,27 +2,15 @@
 
 #include <iostream>
 
-void createUserList(UserList& list) {
+void initializeUserList(UserList& list) {
   list.first = nullptr;
 }
 
-void freeUserList(UserList& list) {
-  UserAddress user_temp;
-
+void destroyUserList(UserList& list) {
+  UserAddress temp;
   while(!isUserListEmpty(list)) {
-    removeFirstUserOnList(list, user_temp);
-    delete user_temp;
-  }
-}
-
-void updateUserName(UserList& list, std::string username, std::string name) {
-  UserAddress current_position;
-  
-  current_position = searchUserByUsername(list, username);
-  if(current_position != nullptr) {
-    current_position->info.name = name;
-  } else {
-    std::cout << "Tidak bisa mengubah nama user karena user '" << username << "' tidak ditemukan!" << std::endl;
+    removeFirstUser(list, temp);
+    delete temp;
   }
 }
 
@@ -30,145 +18,171 @@ bool isUserListEmpty(UserList list) {
   return list.first == nullptr;
 }
 
-UserAddress searchUserByUsername(UserList list, std::string username) {
-  UserAddress current_position;
-  UserAddress user_position;
+void dumpUserList(UserList list) {
+  UserAddress curr;
 
-  user_position = nullptr;
-  current_position = list.first;
-
-  while(current_position != nullptr && user_position == nullptr) {
-    if(current_position->info.username == username) {
-      user_position = current_position;
+  curr = list.first;
+  while(curr != nullptr) {
+    std::cout << "Username: " << curr->info.username << std::endl;
+    std::cout << "Name: " << curr->info.name << std::endl;
+    std::cout << "Account Type: " << curr->info.type << std::endl;
+    if(curr->next != nullptr) {
+      std::cout << std::endl;
     }
-    current_position = current_position->next;
+    curr = curr->next;
+  }
+}
+
+UserAddress searchUser(UserList list, std::string username) {
+  UserAddress curr;
+
+  curr = list.first;
+  while(curr != nullptr && curr->info.username != username) {
+    curr = curr->next;
   }
 
-  return user_position;
+  return curr;
 }
 
-bool isUserExistByUsername(UserList list, std::string username) {
-  return searchUserByUsername(list, username) != nullptr;
+bool doesUserExist(UserList list, std::string username) {
+  return searchUser(list, username) != nullptr;
 }
 
-UserAddress createUserElement(std::string username, std::string name, std::string account_type) {
-  UserAddress newUserElement = new UserElement;
-  newUserElement->info.username = username;
-  newUserElement->info.name = name;
-  newUserElement->info.account_type = account_type;
-  newUserElement->next = nullptr;
-  return newUserElement;
+UserAddress createUserElement(
+  std::string username,
+  std::string name,
+  std::string type
+) {
+  UserAddress new_user = new UserElement;
+  new_user->info.username = username;
+  new_user->info.name = name;
+  new_user->info.type = type;
+  new_user->next = nullptr;
+  return new_user;
 }
 
-void registerUser(UserList& list, std::string username, std::string name) {
-  UserAddress current_position;
-  UserAddress new_user;
+void insertUserLast(UserList& list, UserAddress user) {
+  UserAddress curr;
 
-  if(!isUserExistByUsername(list, username)) {
-    new_user = createUserElement(username, name, "free");
-
-    if(isUserListEmpty(list)) {
-      list.first = new_user;
-    } else {
-      current_position = list.first;
-
-      while(current_position->next != nullptr) {
-        current_position = current_position->next;
-      }
-
-      current_position->next = new_user;
-    }
+  if(isUserListEmpty(list)) {
+    list.first = user;
   } else {
-    std::cout << "Tidak dapat melakukan register karena username '" << username << "' telah digunakan!" << std::endl;
-  }
-}
-
-void removeUser(UserList& list, std::string username, UserAddress& user_removed) {
-  UserAddress previous_position, current_position;
-  UserAddress targeted_user;
-
-  user_removed = nullptr;
-  previous_position = nullptr;
-  current_position = list.first;
-  
-  while(current_position != nullptr && current_position->info.username != username) {
-    previous_position = current_position;
-    current_position = current_position->next;
-  }
-
-  if(current_position != nullptr) {
-    if(previous_position == nullptr) {
-      targeted_user = list.first;
-      list.first = list.first->next;
-
-      targeted_user->next = nullptr;
-      user_removed = targeted_user;
-    } else {
-      targeted_user = current_position;
-      previous_position = current_position->next;
-
-      targeted_user->next = nullptr;
-      user_removed = targeted_user;
+    curr = list.first;
+    while(curr->next != nullptr) {
+      curr = curr->next;
     }
+    curr->next = user;
   }
 }
 
-void removeFirstUserOnList(UserList& list, UserAddress& user_removed) {
-  UserAddress targeted_user;
+void removeFirstUser(UserList& list, UserAddress& out) {
+  UserAddress user;
 
   if(!isUserListEmpty(list)) {
-    targeted_user = list.first;
+    user = list.first;
     list.first = list.first->next;
-    targeted_user->next = nullptr;
+    user->next = nullptr;
+    out = user;
+  }
+}
 
-    user_removed = targeted_user;
+void removeLastUser(UserList& list, UserAddress& out) {
+  UserAddress prev, curr, user;
+
+  if(!isUserListEmpty(list)) {
+    prev = nullptr;
+    curr = list.first;
+
+    while(curr->next != nullptr) {
+      prev = curr;
+      curr = curr->next;
+    }
+
+    if(prev == nullptr) {
+      removeFirstUser(list, out);
+    } else {
+      user = curr;
+      prev->next = curr->next;
+      user->next = nullptr;
+      out = user;
+    }
+  }
+}
+
+void removeAfterUser(UserList& list, UserAddress target, UserAddress& out) {
+  UserAddress curr, user;
+
+  if(!isUserListEmpty(list)) {
+    curr = list.first;
+    while(curr != nullptr && curr != target) {
+      curr = curr->next;
+    }
+
+    if(curr != nullptr) {
+      user = curr->next;
+      curr->next = curr->next->next;
+      user->next = nullptr;
+      out = user;
+    }
+  }
+}
+
+void registerUser(
+  UserList& list,
+  std::string username,
+  std::string name
+) {
+  UserAddress new_user;
+
+  if(!doesUserExist(list, username)) {
+    new_user = createUserElement(username, name, "free");
+    insertUserLast(list, new_user);
+  } else {
+    // TODO : Handle error message username has been used
+  }
+}
+
+void upgradeUserType(UserList& list, std::string username) {
+  UserAddress user;
+  if(doesUserExist(list, username)) {
+    user = searchUser(list, username);
+    user->info.type = "premium";
+  } else {
+    // TODO : Handle error message user doesn't exist
+  }
+}
+
+void downgradeUserType(UserList& list, std::string username) {
+  UserAddress user;
+  if(doesUserExist(list, username)) {
+    user = searchUser(list, username);
+    user->info.type = "free";
+  } else {
+    // TODO : Handle error message user doesn't exist
   }
 }
 
 void deactivateUser(UserList& list, std::string username) {
-  UserAddress user_target;
+  UserAddress prev, curr, user;
 
-  removeUser(list, username, user_target);
+  if(doesUserExist(list, username)) {
+    prev = nullptr;
+    curr = list.first;
 
-  if(user_target != nullptr) {
-    delete user_target;
-  } else {
-    std::cout << "Tidak bisa deaktivasi user karena user '" << username << "' tidak ditemukan!" << std::endl;
-  }
-}
-
-void dumpUserList(UserList list) {
-  UserAddress current_position;
-  int index;
-
-  index = 1;
-  current_position = list.first;
-
-  while(current_position != nullptr) {
-    std::cout << "# User ke-" << index << std::endl;
-    std::cout << "Username: " << current_position->info.username << std::endl;
-    std::cout << "Nama: " << current_position->info.name << std::endl;
-    std::cout << "Tipe Akun: " << current_position->info.account_type << std::endl;
-
-    if(current_position->next != nullptr) {
-      std::cout << std::endl;
+    while(curr != nullptr && curr->info.username != username) {
+      prev = curr;
+      curr = curr->next;
     }
 
-    index = index + 1;
-    current_position = current_position->next;
-  }
-}
-
-void updateUserAccountType(UserList& list, std::string username, std::string new_account_type) {
-  UserAddress user_target;
-  user_target = searchUserByUsername(list, username);
-  if (user_target != nullptr) {
-    if (new_account_type == "free" || new_account_type == "premium") {
-      user_target->info.account_type = new_account_type;
+    if(prev == nullptr && curr != nullptr) {
+      removeFirstUser(list, user);
+    } else if(prev != nullptr && curr->next == nullptr) {
+      removeLastUser(list, user);
     } else {
-      std::cout << "Tidak bisa mengubah tipe akun user '" << username << "' karena tipe '" << new_account_type << "' invalid!" << std::endl;
+      removeAfterUser(list, prev, user);
     }
+    delete user;
   } else {
-    std::cout << "Tidak bisa mengubah tipe akun user karena user '" << username << "' tidak ditemukan!" << std::endl;
+    // TODO : Handle error message user doesn't exist
   }
 }
