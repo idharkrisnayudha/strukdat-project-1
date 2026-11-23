@@ -78,6 +78,8 @@ void insertUserLast(UserList& list, UserAddress user) {
 void removeFirstUser(UserList& list, UserAddress& out) {
   UserAddress user;
 
+  out = nullptr;
+
   if(!isUserListEmpty(list)) {
     user = list.first;
     list.first = list.first->next;
@@ -88,6 +90,8 @@ void removeFirstUser(UserList& list, UserAddress& out) {
 
 void removeLastUser(UserList& list, UserAddress& out) {
   UserAddress prev, curr, user;
+
+  out = nullptr;
 
   if(!isUserListEmpty(list)) {
     prev = nullptr;
@@ -111,6 +115,8 @@ void removeLastUser(UserList& list, UserAddress& out) {
 
 void removeAfterUser(UserList& list, UserAddress target, UserAddress& out) {
   UserAddress curr, user;
+
+  out = nullptr;
 
   if(!isUserListEmpty(list)) {
     curr = list.first;
