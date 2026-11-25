@@ -1,13 +1,21 @@
 #include <iostream>
 
 #include "user.h"
+#include "song.h"
 
 int main() {
   UserList user_list;
+  SongList song_list;
+
   initializeUserList(user_list);
+  initializeSongList(song_list);
+
+  goto SONG_TEST;
 
   // user test
   // register
+  USER_TEST:
+
   std::cout << "User Register" << std::endl;
   registerUser(user_list, "Andi", "Andi Wicaksono");
   registerUser(user_list, "Budi", "Budi Gunawan");
@@ -28,6 +36,15 @@ int main() {
   deactivateUser(user_list, "Andi");
   deactivateUser(user_list, "Dodi");
   dumpUserList(user_list);
+
+  // song test
+  SONG_TEST:
+  addSong(song_list, "1", "Lagu A1", "A", 3);
+  addSong(song_list, "3", "Lagu A2", "A", 4);
+  addSong(song_list, "2", "Lagu A2", "A", 2);
+  addSong(song_list, "4", "Lagu B1", "B", 1);
+
+  dumpSongList(song_list);
 
   destroyUserList(user_list);
   return 0;
