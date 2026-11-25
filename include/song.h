@@ -95,4 +95,7 @@ void insertSongNode(SongAddress& node, SongAddress new_song);
  */
 void addSong(SongList& list, std::string id, std::string title, std::string artist, int duration);
 
+
+
+
 #endif // INCLUDE_SONG_H_
