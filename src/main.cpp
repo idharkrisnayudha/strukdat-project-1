@@ -50,8 +50,11 @@ int main() {
 
   // remove song
   std::cout << "\nRemove song" << std::endl;
-  removeSong(song_list, "4");
+  deleteSong(song_list, "4");
+  dumpSongList(song_list);
 
+  // update
+  updateSongTitle(song_list, "1", "A keren");
   dumpSongList(song_list);
 
   destroyUserList(user_list);

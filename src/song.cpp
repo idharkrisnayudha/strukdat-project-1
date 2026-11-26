@@ -105,18 +105,18 @@ SongAddress findMinSongNode(SongAddress node) {
   return node;
 }
 
-SongAddress removeSongNode(SongAddress& node, std::string id) {
+SongAddress deleteSongNode(SongAddress& node, std::string id) {
   SongAddress temp;
 
   if(node != nullptr) {
     // search phase
     if(id < node->info.id) {
-      node->left = removeSongNode(node->left, id);
+      node->left = deleteSongNode(node->left, id);
     } else if(id > node->info.id) {
-      node->right = removeSongNode(node->right, id);
+      node->right = deleteSongNode(node->right, id);
     }
 
-    // remove phase
+    // delete phase
     else {
       if(node->left == nullptr && node->right == nullptr) {
         delete node;
@@ -132,7 +132,7 @@ SongAddress removeSongNode(SongAddress& node, std::string id) {
       } else {
         temp = findMinSongNode(node->right);
         node->info = temp->info;
-        node->right = removeSongNode(node->right, id);
+        node->right = deleteSongNode(node->right, id);
       }
     }
   }
@@ -140,8 +140,8 @@ SongAddress removeSongNode(SongAddress& node, std::string id) {
     return node;
 }
 
-void removeSong(SongList& list, std::string id) {
-  removeSongNode(list.node, id);
+void deleteSong(SongList& list, std::string id) {
+  deleteSongNode(list.node, id);
 }
 
 void updateSongArtist(SongList& list, std::string id, std::string new_artist) {

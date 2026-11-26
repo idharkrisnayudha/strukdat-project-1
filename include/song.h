@@ -104,7 +104,7 @@ SongAddress findMinSongNode(SongAddress node);
  * Mengeluarkan song dengan id yang ditargetkan dari tree node
  * dan menghancurkannya
  */
-SongAddress removeSongNode(SongAddress& node, std::string id);
+SongAddress deleteSongNode(SongAddress& node, std::string id);
 
 /**
  * Mengeluarkan song dari list dan menghancurkannya
@@ -112,7 +112,7 @@ SongAddress removeSongNode(SongAddress& node, std::string id);
  * F.S : mengeluarkan song dengan id yang ditargetkan dari list dan
  *       menghancurkannya
  */
-void removeSong(SongList& list, std::string id);
+void deleteSong(SongList& list, std::string id);
 
 /**
  * Memperbarui nama artist dari sebuah song
