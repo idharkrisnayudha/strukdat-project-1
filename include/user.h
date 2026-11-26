@@ -11,7 +11,7 @@ typedef UserElement* UserAddress;
 struct UserInfoType {
   std::string username;
   std::string name;
-  std::string account_type;
+  std::string type;
   };
 
 struct UserElement {
