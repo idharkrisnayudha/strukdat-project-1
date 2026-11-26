@@ -1,131 +1,93 @@
-#include <song.h>
+#include "song.h"
 
 #include <iostream>
 
-void createSongList(SongList &list) {
-    list.first = nullptr;
+void initializeSongList(SongList& list) {
+  list.node = nullptr;
 }
 
-SongAddress createSong(std::string id, std::string title, std::string artist, std::string genre, int duration) {
-  SongAddress newsongelement = new SongElement;
-  newsongelement->info.id = id;
-  newsongelement->info.title = title;
-  newsongelement->info.artist = artist;
-  newsongelement->info.genre = genre;
-  newsongelement->info.duration = duration;
-  newsongelement->next = nullptr;
-  return newsongelement;
-}
+void dumpSongNode(SongAddress node) {
+  if(node != nullptr) {
+    std::cout << "ID: " << node->info.id << std::endl;
+    std::cout << "Title: " << node->info.title << std::endl;
+    std::cout << "Artist: " << node->info.artist << std::endl;
+    std::cout << "Duration: " << node->info.duration << " minutes" << std::endl;
+    std::cout << std::endl;
 
-void insertLastSong(SongList &list, SongAddress song) {
-    if (song == nullptr) return;
-    song->next = nullptr;
-
-    if (list.first == nullptr) {
-        list.first = song;
-    } else {
-        SongAddress P = list.first;
-        while (P->next != nullptr) {
-            P = P->next;
-        }
-        P->next = song;
+    if(node->left != nullptr) {
+      dumpSongNode(node->left);
     }
+
+    if(node->right != nullptr) {
+      dumpSongNode(node->right);
+    }
+  }
+}
+
+void dumpSongList(SongList& list) {
+  dumpSongNode(list.node);
+}
+
+bool isSongListEmpty(SongList list) {
+  return list.node == nullptr;
+}
+
+SongAddress findSongNode(SongAddress node, std::string id) {
+  SongAddress song;
+
+  song = nullptr;
+
+  if(node != nullptr) {
+    if(node->info.id == id) {
+      song = node;
+    } else if(id < node->info.id) {
+      song = findSongNode(node->left, id);
+    } else {
+      song = findSongNode(node->right, id);
+    }
+  }
+
+  return song;
+}
+
+bool doesSongExist(SongList& list, std::string id) {
+  return findSongNode(list.node, id) != nullptr;
 }
 
 SongAddress searchSong(SongList list, std::string id) {
-    SongAddress P = list.first;
-    while (P != nullptr) {
-        if (P->info.id == id) {
-            return P;
-        }
-        P = P->next;
-    }
-    return nullptr;
+  return findSongNode(list.node, id);
 }
 
-void deleteSong(SongList list, std::string id) {
-  if (list.first == nullptr) return;
-
-    SongAddress P = list.first;
-    SongAddress prev = nullptr;
-
-    while (P != nullptr && P->info.id != id) {
-        prev = P;
-        P = P->next;
-    }
-
-    if (P != nullptr) {
-        if (prev == nullptr) {
-            list.first = P->next;
-        } else {
-            prev->next = P->next;
-        }
-        P->next = nullptr;
-    }
+SongAddress createSongNode(std::string id, std::string title, std::string artist, int duration) {
+  SongAddress new_node = new SongNode;
+  new_node->info.id = id;
+  new_node->info.title = title;
+  new_node->info.artist = artist;
+  new_node->info.duration = duration;
+  new_node->left = nullptr;
+  new_node->right = nullptr;
+  return new_node;
 }
 
-void emptySongList(SongList &list) {
-  SongAddress P = list.first;
-  while (P != nullptr) {
-      SongAddress temp = P;
-      P = P->next;
-      temp->next = nullptr;
-  }
-  list.first = nullptr;
-} 
-
-void createBSTList(BSTAddress &root) {
-    root = nullptr;
-}
-
-BSTAddress createBST(std::string id, SongAddress song) {
-    BSTAddress newnode = new BSTNode;
-    newnode->id = id;
-    newnode->playcount = 0;
-    newnode->playing_song = song;
-    newnode->left = nullptr;
-    newnode->right = nullptr;
-    return newnode;
-}
-
-void insertBST(BSTAddress &root, BSTAddress newnode) {
-  if (newnode == nullptr){
-    return nullptr;
-  }
-  if (root == nullptr) {
-    root = newnode;
-  } else if (newnode->id < root->id) {
-    insertBST(root->left, newnode);
-  } else if (newnode->id > root->id) {
-    insertBST(root->right, newnode);
-  }
-}
-
-BSTAddress searchBST(BSTAddress root, std::string id) {
-  if (root == nullptr || root->id == id) {
-    return root;
-  } else if (id < root->id) {
-    return searchBST(root->left, id);
+void insertSongNode(SongAddress& node, SongAddress new_song) {
+  if(node == nullptr) {
+    node = new_song;
   } else {
-    return searchBST(root->right, id);
-  }
-}
-
-void playSong(BSTAddress root, std::string id) {
-  BSTAddress target = searchBST(root, id);
-  if (target != nullptr) {
-    target->playcount++;
-    if (target->playing_song != nullptr) {
-      std::cout << "Memutar: " << target->playing_song->info.title << " - " << target->playing_song->info.artist << " (Total diputar: " << target->playcount << ")" << std::endl;
+    if(new_song->info.id < node->info.id) {
+      insertSongNode(node->left, new_song);
     } else {
-      std::cout << "Memutar lagu ID " << target->id << " (Total diputar: " << target->playcount << ")" << std::endl;
+      insertSongNode(node->right, new_song);
     }
-  } else {
-    std::cout << "Lagu dengan ID " << id << " tidak ditemukan di katalog." << std::endl;
   }
-  // note: ini katanya mau bener bener putar lagu kan jo?
 }
 
-void showTrending5(BSTAddress root, SongAddress){
-  hehe ga paham ini mah
+void addSong(SongList& list, std::string id, std::string title, std::string artist, int duration) {
+  SongAddress new_song;
+
+  if(!doesSongExist(list, id)) {
+    new_song = createSongNode(id, title, artist, duration);
+    insertSongNode(list.node, new_song);
+  } else {
+    // NOTE: tampilkan pesan error bahwa 'id' sudah digunakan!
+  }
 }

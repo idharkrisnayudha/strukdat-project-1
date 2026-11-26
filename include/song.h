@@ -1,140 +1,98 @@
 #ifndef INCLUDE_SONG_H
 #define INCLUDE_SONG_H
 
+// NOTE: Implementasi song menggunakan binary tree
+// NOTE: Implementasi binary tree akan disimiliarkan dengan SLL dan DLL
+
 #include <string>
 
-struct SongElement;
-typedef struct SongElement *SongAddress;
+struct SongNode;
+typedef SongNode* SongAddress;
 
 struct SongInfoType {
   std::string id;
   std::string title;
   std::string artist;
-  std::string genre;
   int duration;
 };
 
-struct SongElement {
-  SongAddress next;
+struct SongNode {
   SongInfoType info;
+  SongAddress left;
+  SongAddress right;
 };
 
-struct SongList{
-  SongAddress first;
-};
-
-typedef struct BSTNode *BSTAddress;
-
-struct BSTNode {
-  std::string id;
-  int playcount;
-  SongAddress playing_song;
-  BSTAddress left;
-  BSTAddress right;
+struct SongList {
+  SongAddress node;
 };
 
 /**
- * Procedure berguna untuk menginisialisasi
- * SongList agar element first menjadi nullptr
- * I.S: sebuah refrence ke SongList
- * F.S: element first pada SongList menjadi nullptr
+ * Menginisialisasi song list
+ * I.S : sebuah song list
+ * F.S : element node pada song list menjadi "nullptr"
  */
-void createSongList(SongList& list);
+void initializeSongList(SongList& list);
 
 /**
- * Sebuah function yang berguna untuk membuat
- * SongElement dan akan mengembalikannya
- * sebagai SongAddress.
+ * Menampilkan informasi song di node dan berlanjut hingga childern yang
+ * dimiliki
+ * I.S : sebuah song node
+ * F.S : menampilkan semua informasi song di node dan childernnya
  */
-SongAddress createSong(std::string id, std::string title, std::string artist, std::string genre, int duration);
+void dumpSongNode(SongAddress node);
 
 /**
- * Sebuah procedure yang berguna untuk menambahkan
- * SongElement ke bagian terakhir list.
- * I.S: refrence SongList dan SongAddress
- * F.S: bertambahnya SongElement pada list
+ * Menampilkan informasi song pada semua song di list
+ * I.S : sebuah song list
+ * F.S : menampilkan semua informasi song di song list
  */
-void insertLastSong(SongList& list, SongAddress song);
+void dumpSongList(SongList& list);
 
 /**
- * Sebuah function yang berguna untuk mencari
- * address song dari sebuah id yang
- * diberikan. Dan akan memberikan address
- * jika ada, dan nullptr jika tidak ada.
+ * Mengecek apakah song list kosong atau tidak dan akan mengembalikan
+ * "true" jika kosong dan "false" jika tidak kosong.
  */
-SongAddress searchSong(SongList song, std::string id);
+bool isSongListEmpty(SongList list);
 
 /**
- * Sebuah procedure yang berguna untuk menghapus
- * SongElement dari list. Dengan cara mengeluarkan dan
- * delete song.
- * I.S: refrence ke SongList dan id dari song
- * F.S: bertambahnya SongElement pada list
+ * Mencari song pada node tree dan akan mengembalikan address song
+ * jika ditemukan dan "nullptr" jika tidak ditemukan.
  */
-void deleteSong(SongList song, std::string id);
+SongAddress findSongNode(SongAddress node, std::string id);
 
 /**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
+ * Mengecek apakah song ada di list dan akan mengembalikan "true"
+ * jika ditemukan dan "false" jika tidak ditemukan.
  */
-void showAllSongs(SongList song);
+bool doesSongExist(SongList& list, std::string id);
 
 /**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
+ * Mencari song pada list dan akan mengembalikan address song jika
+ * ditemukan dan "nullptr" jika tidak ditemukan.
  */
-void createBSTList(BSTAddress &root);
+SongAddress searchSong(SongList list, std::string id);
 
 /**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
+ * Membuat song node dari informasi yang diberikan dan akan mengembalikannya
+ * sebagai song address.
  */
-BSTAddress createBST(std::string id, SongAddress song);
+SongAddress createSongNode(std::string id, std::string title, std::string artist, int duration);
 
 /**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
+ * Menambahkan song node baru di node tree
+ * I.S : song node dan song node baru
+ * F.S : menambahkan song node baru ke parent atau root, dimana
+ *       jika parent akan diisi bila childern masih "nullptr"
+ *       dengan aturan kiri untuk id song baru lebih kecil
+ *       dibandingkan id parent, dan kanan jika lebih besar.
  */
-void insertBST(BSTAddress &root, BSTAddress new_node);
+void insertSongNode(SongAddress& node, SongAddress new_song);
 
 /**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
+ * Menambahkan song baru ke list
+ * I.S : song list, id, judul, artist, dan durasi
+ * F.S : song baru telah ditambahkan ke list
  */
-BSTAddress searchBST(BSTAddress root, std::string id);
-
-/**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
- */
-void deleteBST(BSTAddress &root, std::string id);
-
-/**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
- */
-void playSong(BSTAddress root, std::string id);
-
-/**
- * Sebuah procedure yang berguna untuk menampilkan
- * semua song yang ada pada list.
- * I.S: refrence ke SongList
- * F.S: menampilkan semua song yang ada pada list
- */
-void showTrending5(BSTAddress root, SongAddress);
+void addSong(SongList& list, std::string id, std::string title, std::string artist, int duration);
 
 #endif // INCLUDE_SONG_H_

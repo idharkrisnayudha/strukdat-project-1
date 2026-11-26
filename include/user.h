@@ -1,12 +1,12 @@
 #ifndef INCLUDE_USER_H_
 #define INCLUDE_USER_H_
 
-#include "song.h"
+// NOTE: Implementasi user menggunakan double linked list
 
 #include <string>
 
 struct UserElement;
-using UserAddress = UserElement*;
+typedef UserElement* UserAddress;
 
 struct UserInfoType {
   std::string username;
@@ -17,99 +17,135 @@ struct UserInfoType {
 struct UserElement {
   UserInfoType info;
   UserAddress next;
-  SongList playlist;
+  UserAddress prev;
 };
 
 struct UserList {
   UserAddress first;
+  UserAddress last;
 };
 
-// Procedure initialize an empty user list.
-// I.S. : The user list has been declared.
-// F.S. : The first pointer is set to nullptr.
+/**
+ * Menginisialisasi user list
+ * I.S : sebuah user list
+ * F.S : element first dan last menjadi nullptr
+ */
 void initializeUserList(UserList& list);
 
-// Function check whether the user list is empty.
-// Returns true if the list is empty, otherwise false.
-bool isUserListEmpty(UserList list);
-
-// Procedure delete all elements from the user list.
-// I.S. : The user list has been initialized.
-// F.S. : All elements are deleted and the first pointer is set to nullptr.
+/**
+ * Menghancurkan user list
+ * I.S : sebuah user list
+ * F.S : semua user pada list akan dilepaskan dan dihancurkan
+ */
 void destroyUserList(UserList& list);
 
-// Function find a user by their username.
-// Returns the address of the matching user, or nullptr if not found.
-UserAddress searchUser(UserList list, std::string username);
-
-// Function check whether a user exists in the list.
-// Returns true if the user exists, otherwise false.
-bool doesUserExist(UserList list, std::string username);
-
-// Procedure display all users stored in the list.
-// I.S. : The user list has been initialized.
-// F.S. : All user information is displayed without modifying the list.
+/**
+ * Menampilkan semua user pada list
+ * I.S : sebuah user list
+ * F.S : menampilkan informasi untuk setiap user pada list
+ */
 void dumpUserList(UserList list);
 
-// Function create a new user element.
-// Returns the address of the newly allocated user element.
-// The new element contains the given information and has next set to nullptr.
-UserAddress createUserElement(
-  std::string username,
-  std::string name,
-  std::string type
-);
+/**
+ * Mengecek apakah user list kosong atau tidak dimana akan memberikan
+ * hasil "true" jika kosong dan "false" jika tidak kosong
+ */
+bool isUserListEmpty(UserList& list);
 
-// Procedure insert a user element at the end of the list.
-// I.S. : The user list is initialized and the new element is detached.
-// F.S. : The new element is inserted at the end of the list.
-void insertUserLast(UserList& list, UserAddress user);
+/**
+ * Mencari address user yang diingikan berdasarkan username dari list
+ * dan akan memberikan address yang dituju jika user ditemukan
+ * dan "nullptr" jika tidak ditemukan.
+ */
+UserAddress searchUser(UserList list, std::string username);
 
-// Procedure remove the first element from the list.
-// I.S. : The user list has been initialized.
-// F.S. : The first element is removed and its address is stored in out.
-//        If the list is empty, out is set to nullptr.
+/**
+ * Mengecek apakah user ada pada list dimana akan memberikan hasil
+ * "true" jika ditemukan dan "false" jika tidak ditemukan
+ */
+bool doesUserExist(UserList list, std::string username);
+
+/**
+ * Membuat user element baru dan akan memberikan hasil dalam
+ * UserAddress.
+ */
+UserAddress createUserElement(std::string username, std::string name, std::string type);
+
+/**
+ * Mengubah tipe pada sebuah user
+ * I.S : user list, username, dan tipe baru ("free" atau "premium")
+ * F.S : tipe akun user dengan username yang ditargetkan akan berubah sesuai
+ *       dengan tipe yang diberikan
+ */
+void setUserType(UserList& list, std::string username, std::string new_type);
+
+/**
+ * Mengubah nama pada sebuah user
+ * I.S : user list, username, dan nama baru
+ * F.S : nama pada sebuah user yang ditargetkan akan berubah sesuai dengan
+ *       nama yang diberikan
+ */
+void setUserName(UserList& list, std::string username, std::string new_name);
+
+/**
+ * Menambahkan user baru pada list
+ * I.S : user list, username (unique), dan nama
+ * F.S : user baru akan masuk ke list dengan tipe akun default "free" dan
+ *       jika username sudah digunakan maka proses akan dibatalkan
+ */
+void registerUser(UserList& list, std::string username, std::string name);
+
+/**
+ * Menghapus user pada list
+ * I.S : user list dan username
+ * F.S : user yang ditargetkan akan dihapus dari list dan dihancurkan
+ */
+void deactivateUser(UserList& list, std::string username);
+
+/**
+ * Menambahkan user element baru ke posisi terdepan list
+ * I.S : user list dan user element baru
+ * F.S : user element ditambahkan ke posisi yang paling di depan
+ */
+void insertUserFirst(UserList& list, UserAddress new_user);
+
+/**
+ * Menambahkan user element baru ke posisi belakang list
+ * I.S : user list dan user element baru
+ * F.S : user element ditambahkan ke posisi yang paling belakang
+ */
+void insertUserLast(UserList& list, UserAddress new_user);
+
+/**
+ * Menambahkan user element baru setelah user yang ditargetkan
+ * I.S : user list dan user element baru
+ * F.S : user element ditambahkan setelah user yang ditargetkan
+ */
+void insertUserAfter(UserList& list, UserAddress target, UserAddress new_user);
+
+/**
+ * Mengeluarkan user di posisi pertama dari list
+ * I.S : user list dan "refrensi" ke lokasi user
+ * F.S : user di posisi pertama sudah dikeluarkan dan diberikan
+ *       melalui "refrenrensi" user
+ */
 void removeFirstUser(UserList& list, UserAddress& out);
 
-// Procedure remove the last element from the list.
-// I.S. : The user list has been initialized.
-// F.S. : The last element is removed and its address is stored in out.
-//        If the list is empty, out is set to nullptr.
+/**
+ * Mengeluarkan user di posisi paling belakang list
+ * I.S : user list dan "refrensi" ke lokasi user
+ * F.S : user di posisi paling belakang sudah dikeluarkan dan diberikan
+ *       melalui "refrenrensi" user
+ */
 void removeLastUser(UserList& list, UserAddress& out);
 
-// Procedure remove the element immediately after the specified user.
-// I.S. : The user list has been initialized and user belongs to the list.
-// F.S. : The element after user is removed and its address is stored in out.
-//        If no successor exists, out is set to nullptr.
-void removeAfterUser(UserList& list, UserAddress user, UserAddress& out);
-
-// Procedure register a new user with the default free account type.
-// I.S. : The user list has been initialized.
-// F.S. : A new user is inserted at the end of the list if the username
-//        does not already exist. The account type is set to "free".
-//        Otherwise, the list remains unchanged.
-void registerUser(
-  UserList& list,
-  std::string username,
-  std::string name
-);
-
-// Procedure upgrade an existing user's account to premium.
-// I.S. : The user list has been initialized.
-// F.S. : The account type is changed to "premium" if the user exists.
-//        Otherwise, the list remains unchanged.
-void upgradeUserType(UserList& list, std::string username);
-
-// Procedure downgrade an existing user's account to free.
-// I.S. : The user list has been initialized.
-// F.S. : The account type is changed to "free" if the user exists.
-//        Otherwise, the list remains unchanged.
-void downgradeUserType(UserList& list, std::string username);
-
-// Procedure deactivate a user and remove their element from the list.
-// I.S. : The user list has been initialized.
-// F.S. : The user element is removed and its memory is deallocated.
-//        If the user does not exist, the list remains unchanged.
-void deactivateUser(UserList& list, std::string username);
+/**
+ * Mengeluarkan user dari list dimana posisinya terletak setelah user
+ * yang ditargetkan
+ * I.S : user list, user yang ditargetkan, dan "renfrensi" ke lokasi user
+ * F.S : user dengan posisi setelah dari user yang ditargetkan sudah di keluarkan
+ *       dari list
+ */
+void removeAfterUser(UserList& list, UserAddress target, UserAddress& out);
 
 #endif // INCLUDE_USER_H_
