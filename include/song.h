@@ -5,8 +5,14 @@
 
 struct SongElement;
 typedef struct SongElement *SongAddress;
+=========
+// NOTE: Implementasi song menggunakan binary tree
+// NOTE: Implementasi binary tree akan disimiliarkan dengan SLL dan DLL
+
+#include <string>
+
 struct SongNode;
-typedef struct SongNode *SongAddress;
+typedef SongNode* SongAddress;
 
 struct SongInfoType {
   std::string id;

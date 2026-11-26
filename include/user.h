@@ -1,6 +1,8 @@
 #ifndef INCLUDE_USER_H_
 #define INCLUDE_USER_H_
 
+// NOTE: Implementasi user menggunakan double linked list
+
 #include <string>
 
 struct UserElement;
