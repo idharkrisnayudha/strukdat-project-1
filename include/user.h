@@ -1,8 +1,6 @@
 #ifndef INCLUDE_USER_H_
 #define INCLUDE_USER_H_
 
-// NOTE: Implementasi user menggunakan double linked list
-
 #include <string>
 
 struct UserElement;
@@ -11,13 +9,12 @@ typedef UserElement* UserAddress;
 struct UserInfoType {
   std::string username;
   std::string name;
-  std::string type;
-};
+  std::string account_type;
+  };
 
 struct UserElement {
   UserInfoType info;
   UserAddress next;
-  UserAddress prev;
 };
 
 struct UserList {

@@ -1,13 +1,12 @@
 #ifndef INCLUDE_SONG_H
 #define INCLUDE_SONG_H
 
-// NOTE: Implementasi song menggunakan binary tree
-// NOTE: Implementasi binary tree akan disimiliarkan dengan SLL dan DLL
-
 #include <string>
 
+struct SongElement;
+typedef struct SongElement *SongAddress;
 struct SongNode;
-typedef SongNode* SongAddress;
+typedef struct SongNode *SongAddress;
 
 struct SongInfoType {
   std::string id;
