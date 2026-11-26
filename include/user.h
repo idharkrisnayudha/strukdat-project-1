@@ -15,6 +15,7 @@ struct UserInfoType {
 struct UserElement {
   UserInfoType info;
   UserAddress next;
+  UserAddress prev;
 };
 
 struct UserList {

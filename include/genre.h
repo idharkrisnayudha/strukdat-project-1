@@ -3,25 +3,18 @@
 #include "song.h"
 #include <string>
 
-struct SongNode;
-typedef SongNode* SongAddress;
+using namespace std;
 
-struct SongInfoType {
-  std::string id;
-  std::string title;
-  std::string artist;
-  std::string genre;
-  int duration;
+typedef struct GenreElement *Genreaddress;
+
+struct GenreElement {
+    std::string info; 
+    int count;      
+    Genreaddress next;
 };
 
-struct SongNode {
-  SongInfoType info;
-  SongAddress left;
-  SongAddress right;
-};
-
-struct SongList {
-  SongAddress node;
+struct GenreList {
+    Genreaddress first;
 };
 
 /**
@@ -29,7 +22,7 @@ struct SongList {
  * I.S : sebuah genre list
  * F.S : element node menjadi nullptr
  */
-void initializeGenreList(SongList& list);
+void createListGenre(GenreList &list);
 
 /**
  * Mencari address genre yang diingikan berdasarkan nama genre dari list
@@ -43,14 +36,14 @@ SongAddress searchGenre(SongList list, std::string genre);
  * I.S : genre list dan genre element baru
  * F.S : genre element ditambahkan ke posisi yang paling di depan
  */
-void insertGenreFirst(SongList& list, SongAddress new_genre);
+void insertFirstGenre(GenreList &list, Genreaddress P);
 
 /**
  * Menambahkan genre element baru ke posisi belakang list
  * I.S : genre list dan genre element baru
  * F.S : genre element ditambahkan ke posisi yang paling belakang
  */
-void insertGenreLast(SongList& list, SongAddress new_genre);
+void insertAfterGenre(GenreList &list, Genreaddress prec, Genreaddress P);
 
 /**
  * Menambahkan genre element baru setelah genre yang ditargetkan
@@ -65,7 +58,7 @@ void insertGenreAfter(SongList& list, SongAddress target, SongAddress new_genre)
  * F.S : genre di posisi pertama sudah dikeluarkan dan diberikan
  *       melalui "refrenrensi" genre
  */
-void removeFirstGenre(SongList& list, SongAddress& out);
+void removeFirstGenre(GenreList &list, Genreaddress &P);
 
 /**
  * Mengeluarkan genre di posisi paling belakang list
@@ -73,7 +66,7 @@ void removeFirstGenre(SongList& list, SongAddress& out);
  * F.S : genre di posisi paling belakang sudah dikeluarkan dan diberikan
  *       melalui "refrenrensi" genre
  */
-void removeLastGenre(SongList& list, SongAddress& out);
+void removeLastGenre(GenreList &list, Genreaddress &P);
 
 /**
  * Mengeluarkan genre dari list dimana posisinya terletak setelah genre
@@ -82,7 +75,7 @@ void removeLastGenre(SongList& list, SongAddress& out);
  * F.S : genre dengan posisi setelah dari genre yang ditargetkan sudah di keluarkan
  *       dari list
  */
-void removeAfterGenre(SongList& list, SongAddress target, SongAddress& out);
+void removeAfterGenre(GenreList &list, Genreaddress Prec, Genreaddress &P);
 
 /**
  * Mengecek apakah genre ada pada list dimana akan memberikan hasil
@@ -90,6 +83,6 @@ void removeAfterGenre(SongList& list, SongAddress target, SongAddress& out);
  * I.S : genre list dan nama genre
  * F.S : memberikan hasil apakah genre ada pada list atau tidak
  */
-bool doesGenreExist(SongList& list, std::string genre);
+bool doesGenreExist(Genreaddress& list, std::string genre);
 
 #endif // INCLUDE_GENRE_H
