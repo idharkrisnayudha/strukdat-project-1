@@ -24,5 +24,7 @@ int main() {
   // update
   updateSongTitle(song_list, "1", "A keren");
   dumpSongList(song_list);
+
+  destroySongList(song_list);
   return 0;
 }

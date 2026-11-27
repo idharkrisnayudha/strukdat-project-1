@@ -34,6 +34,20 @@ struct SongList {
 void initializeSongList(SongList& list);
 
 /**
+ * Menghancurkan semua song di song list
+ * I.S : sebuah song list
+ * F.S : semua song pada list akan dilepaskan dan dihancurkan
+ */
+void destroySongList(SongList& list);
+
+/**
+ * Menghancurkan semua song node yang ada
+ * I.S : sebuah tree node
+ * F.S : semua song pada tree akan dihancurkan
+ */
+void destroyAllSongNode(SongAddress& node);
+
+/**
  * Menampilkan informasi song di node dan berlanjut hingga childern yang
  * dimiliki
  * I.S : sebuah song node

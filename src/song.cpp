@@ -6,6 +6,30 @@ void initializeSongList(SongList& list) {
   list.node = nullptr;
 }
 
+void destroySongList(SongList& list) {
+  destroyAllSongNode(list.node);
+}
+
+void destroyAllSongNode(SongAddress& node) {
+  SongAddress temp;
+
+  if(node != nullptr) {
+    if(node->left != nullptr) {
+      destroyAllSongNode(node->left);
+      node->left = nullptr;
+    }
+
+    if(node->right != nullptr) {
+      destroyAllSongNode(node->right);
+      node->right = nullptr;
+    }
+
+    temp = node;
+    delete temp;
+    node = nullptr;
+  }
+}
+
 void dumpSongNode(SongAddress node) {
   if(node != nullptr) {
     std::cout << "ID: " << node->info.id << std::endl;
