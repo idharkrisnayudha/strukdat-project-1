@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 void initializeSongList(SongList& list) {
   list.node = nullptr;
 }

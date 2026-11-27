@@ -25,8 +25,6 @@ struct UserList {
   UserAddress last;
 };
 
-
-
 /**
  * Menginisialisasi user list
  * I.S : sebuah user list
