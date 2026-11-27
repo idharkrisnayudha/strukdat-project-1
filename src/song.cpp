@@ -8,6 +8,30 @@ void initializeSongList(SongList& list) {
   list.node = nullptr;
 }
 
+void destroySongList(SongList& list) {
+  destroyAllSongNode(list.node);
+}
+
+void destroyAllSongNode(SongAddress& node) {
+  SongAddress temp;
+
+  if(node != nullptr) {
+    if(node->left != nullptr) {
+      destroyAllSongNode(node->left);
+      node->left = nullptr;
+    }
+
+    if(node->right != nullptr) {
+      destroyAllSongNode(node->right);
+      node->right = nullptr;
+    }
+
+    temp = node;
+    delete temp;
+    node = nullptr;
+  }
+}
+
 void dumpSongNode(SongAddress node) {
   if(node != nullptr) {
     std::cout << "ID: " << node->info.id << std::endl;
@@ -52,7 +76,7 @@ SongAddress findSongNode(SongAddress node, std::string id) {
   return song;
 }
 
-bool doesSongExist(SongList& list, std::string id) {
+bool doesSongExist(SongList list, std::string id) {
   return findSongNode(list.node, id) != nullptr;
 }
 
@@ -91,5 +115,84 @@ void addSong(SongList& list, std::string id, std::string title, std::string arti
     insertSongNode(list.node, new_song);
   } else {
     // NOTE: tampilkan pesan error bahwa 'id' sudah digunakan!
+  }
+}
+
+SongAddress findMinSongNode(SongAddress node) {
+  SongAddress min_node;
+
+  min_node = node;
+  if(node != nullptr) {
+    if(node->left != nullptr) {
+      min_node = findMinSongNode(node->left);
+    }
+  }
+
+  return node;
+}
+
+SongAddress deleteSongNode(SongAddress& node, std::string id) {
+  SongAddress temp;
+
+  if(node != nullptr) {
+    // search phase
+    if(id < node->info.id) {
+      node->left = deleteSongNode(node->left, id);
+    } else if(id > node->info.id) {
+      node->right = deleteSongNode(node->right, id);
+    }
+
+    // delete phase
+    else {
+      if(node->left == nullptr && node->right == nullptr) {
+        delete node;
+        node = nullptr;
+      } else if(node->right == nullptr) {
+        temp = node;
+        node = node->left;
+        delete temp;
+      } else if(node->left == nullptr) {
+        temp = node;
+        node = node->right;
+        delete temp;
+      } else {
+        temp = findMinSongNode(node->right);
+        node->info = temp->info;
+        node->right = deleteSongNode(node->right, id);
+      }
+    }
+  }
+
+    return node;
+}
+
+void deleteSong(SongList& list, std::string id) {
+  deleteSongNode(list.node, id);
+}
+
+void updateSongArtist(SongList& list, std::string id, std::string new_artist) {
+  SongAddress song;
+
+  if(doesSongExist(list, id)) {
+    song = searchSong(list, id);
+    song->info.artist = new_artist;
+  }
+}
+
+void updateSongTitle(SongList& list, std::string id, std::string new_title) {
+  SongAddress song;
+
+  if(doesSongExist(list, id)) {
+    song = searchSong(list, id);
+    song->info.title = new_title;
+  }
+}
+
+void updateSongDuration(SongList& list, std::string id, int new_duration) {
+  SongAddress song;
+
+  if(doesSongExist(list, id)) {
+    song = searchSong(list, id);
+    song->info.duration = new_duration;
   }
 }

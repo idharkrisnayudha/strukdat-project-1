@@ -39,6 +39,20 @@ struct SongList {
 void initializeSongList(SongList& list);
 
 /**
+ * Menghancurkan semua song di song list
+ * I.S : sebuah song list
+ * F.S : semua song pada list akan dilepaskan dan dihancurkan
+ */
+void destroySongList(SongList& list);
+
+/**
+ * Menghancurkan semua song node yang ada
+ * I.S : sebuah tree node
+ * F.S : semua song pada tree akan dihancurkan
+ */
+void destroyAllSongNode(SongAddress& node);
+
+/**
  * Menampilkan informasi song di node dan berlanjut hingga childern yang
  * dimiliki
  * I.S : sebuah song node
@@ -69,7 +83,7 @@ SongAddress findSongNode(SongAddress node, std::string id);
  * Mengecek apakah song ada di list dan akan mengembalikan "true"
  * jika ditemukan dan "false" jika tidak ditemukan.
  */
-bool doesSongExist(SongList& list, std::string id);
+bool doesSongExist(SongList list, std::string id);
 
 /**
  * Mencari song pada list dan akan mengembalikan address song jika
@@ -100,7 +114,47 @@ void insertSongNode(SongAddress& node, SongAddress new_song);
  */
 void addSong(SongList& list, std::string id, std::string title, std::string artist, int duration);
 
+/**
+ * Menemuan song node dengan id terendah yang ada di tree
+ */
+SongAddress findMinSongNode(SongAddress node);
 
+/**
+ * Mengeluarkan song dengan id yang ditargetkan dari tree node
+ * dan menghancurkannya
+ */
+SongAddress deleteSongNode(SongAddress& node, std::string id);
 
+/**
+ * Mengeluarkan song dari list dan menghancurkannya
+ * I.S : song list dan id lagu yang ingin dihapus
+ * F.S : mengeluarkan song dengan id yang ditargetkan dari list dan
+ *       menghancurkannya
+ */
+void deleteSong(SongList& list, std::string id);
+
+/**
+ * Memperbarui nama artist dari sebuah song
+ * I.S : song list, id song, dan nama artis baru
+ * F.S : nama artis pada song yang ditargetkan akan berubah sesuai
+ *       dengan nama artis baru yang diberikan
+ */
+void updateSongArtist(SongList& list, std::string id, std::string new_artist);
+
+/**
+ * Memperbarui judul dari sebuah song
+ * I.S : song list, id song, dan judul baru
+ * F.S : judul pada sebuah song yang ditargetkan akan berubah sesuai dengan
+ *       jdul baru yang diberikan
+ */
+void updateSongTitle(SongList& list, std::string id, std::string new_title);
+
+/**
+ * Memperbarui durasi pada sebuah song
+ * I.S : sebuah song list, id song, dan durasi baru
+ * F.S : durasi padaa song yang ditargetkan akan berubah sesuai dengan durasi
+ *       baru yang diberikan
+ */
+void updateSongDuration(SongList& list, std::string id, int new_duration);
 
 #endif // INCLUDE_SONG_H_
