@@ -14,6 +14,9 @@ void destroyUserList(UserList& list) {
     removeFirstUser(list, temp);
     delete temp;
   }
+
+  list.first = nullptr;
+  list.last = nullptr;
 }
 
 void dumpUserList(UserList list) {
@@ -33,7 +36,7 @@ void dumpUserList(UserList list) {
   }
 }
 
-bool isUserListEmpty(UserList& list) {
+bool isUserListEmpty(UserList list) {
   return list.first == nullptr && list.last == nullptr;
 }
 

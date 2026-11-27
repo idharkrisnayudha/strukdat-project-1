@@ -50,12 +50,12 @@ void dumpUserList(UserList list);
  * Mengecek apakah user list kosong atau tidak dimana akan memberikan
  * hasil "true" jika kosong dan "false" jika tidak kosong
  */
-bool isUserListEmpty(UserList& list);
+bool isUserListEmpty(UserList list);
 
 /**
- * Mencari address user yang diingikan berdasarkan username dari list
- * dan akan memberikan address yang dituju jika user ditemukan
- * dan "nullptr" jika tidak ditemukan.
+ * Mencari address user yang diingikan berdasarkan username dan akan
+ * memberikan address yang dituju jika user ditemukan dan "nullptr"
+ * jika tidak ditemukan.
  */
 UserAddress searchUser(UserList list, std::string username);
 
