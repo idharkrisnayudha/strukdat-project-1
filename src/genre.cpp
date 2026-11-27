@@ -4,38 +4,38 @@
 
 using namespace std;
 
-void createListGenre(GenreList &LG) {
-    LG.first = nullptr;
+void createListGenre(GenreList &list) {
+    list.first = nullptr;
 }
 
-Genreaddress allocateGenre(string namaGenre) {
+Genreaddress allocateGenre(string Genre) {
     Genreaddress P = new GenreElement;
-    P->info = namaGenre;
+    P->info = Genre;
     P->count = 1;
     P->next = nullptr;
     return P;
 }
 
-void insertFirstGenre(GenreList &LG, Genreaddress P) {
+void insertFirstGenre(GenreList &list, Genreaddress P) {
     if (P == nullptr) return;
 
-    if (LG.first == nullptr) {
-        LG.first = P;
+    if (list.first == nullptr) {
+        list.first = P;
         P->next = nullptr;
     } else {
-        P->next = LG.first;
-        LG.first = P;
+        P->next = list.first;
+        list.first = P;
     }
 }
 
-void insertLastGenre(GenreList &LG, Genreaddress P) {
+void insertLastGenre(GenreList &list, Genreaddress P) {
     if (P == nullptr) return;
     P->next = nullptr;
 
-    if (LG.first == nullptr) {
-        LG.first = P;
+    if (list.first == nullptr) {
+        list.first = P;
     } else {
-        Genreaddress Q = LG.first;
+        Genreaddress Q = list.first;
         while (Q->next != nullptr) {
             Q = Q->next;
         }
@@ -43,31 +43,31 @@ void insertLastGenre(GenreList &LG, Genreaddress P) {
     }
 }
 
-void insertAfterGenre(GenreList &LG, Genreaddress prec, Genreaddress P) {
+void insertAfterGenre(GenreList &list, Genreaddress prec, Genreaddress P) {
     if (prec == nullptr || P == nullptr) return;
 
     P->next = prec->next;
     prec->next = P;
 }
 
-void removeFirstGenre(GenreList &LG, Genreaddress &P) {
-    if (LG.first == nullptr) {
+void removeFirstGenre(GenreList &list, Genreaddress &P) {
+    if (list.first == nullptr) {
         P = nullptr;
     } else {
-        P = LG.first;
-        LG.first = P->next;
+        P = list.first;
+        list.first = P->next;
         P->next = nullptr;
     }
 }
 
-void removeLastGenre(GenreList &LG, Genreaddress &P) {
-    if (LG.first == nullptr) {
+void removeLastGenre(GenreList &list, Genreaddress &P) {
+    if (list.first == nullptr) {
         P = nullptr;
-    } else if (LG.first->next == nullptr) {
-        P = LG.first;
-        LG.first = nullptr;
+    } else if (list.first->next == nullptr) {
+        P = list.first;
+        list.first = nullptr;
     } else {
-        Genreaddress Q = LG.first;
+        Genreaddress Q = list.first;
         while (Q->next->next != nullptr) {
             Q = Q->next;
         }
@@ -76,7 +76,7 @@ void removeLastGenre(GenreList &LG, Genreaddress &P) {
     }
 }
 
-void removeAfterGenre(GenreList &LG, Genreaddress prec, Genreaddress &P) {
+void removeAfterGenre(GenreList &list, Genreaddress prec, Genreaddress &P) {
     if (prec == nullptr || prec->next == nullptr) {
         P = nullptr;
     } else {
@@ -86,10 +86,10 @@ void removeAfterGenre(GenreList &LG, Genreaddress prec, Genreaddress &P) {
     }
 }
 
-Genreaddress searchGenre(GenreList LG, std::string namaGenre) {
-    Genreaddress Q = LG.first;
+Genreaddress searchGenre(GenreList list, std::string Genre) {
+    Genreaddress Q = list.first;
     while (Q != nullptr) {
-        if (Q->info == namaGenre) {
+        if (Q->info == Genre) {
             return Q;
         }
         Q = Q->next;
@@ -97,6 +97,6 @@ Genreaddress searchGenre(GenreList LG, std::string namaGenre) {
     return nullptr;
 }
 
-bool isExistGenre(GenreList LG, string namaGenre) {
-    return searchGenre(LG, namaGenre) != nullptr;
+bool isExistGenre(GenreList list, string Genre) {
+    return searchGenre(list, Genre) != nullptr;
 }

@@ -18,5 +18,6 @@
     "*.h": "cpp",
     "*.hpp": "cpp",
     "*.cpp": "cpp"
-  }
+  },
+  "C_Cpp.errorSquiggles": "disabled"
 }
