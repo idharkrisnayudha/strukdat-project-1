@@ -14,6 +14,9 @@ void destroyUserList(UserList& list) {
     removeFirstUser(list, temp);
     delete temp;
   }
+
+  list.first = nullptr;
+  list.last = nullptr;
 }
 
 void dumpUserList(UserList list) {
@@ -23,7 +26,7 @@ void dumpUserList(UserList list) {
   while(current != nullptr) {
     std::cout << "Username: " << current->info.username << std::endl;
     std::cout << "Name: " << current->info.name << std::endl;
-    std::cout << "Account Type: " << current->info.account_type << std::endl;
+    std::cout << "Account Type: " << current->info.type << std::endl;
 
     if(current->next != nullptr) {
       std::cout << std::endl;
@@ -33,7 +36,7 @@ void dumpUserList(UserList list) {
   }
 }
 
-bool isUserListEmpty(UserList& list) {
+bool isUserListEmpty(UserList list) {
   return list.first == nullptr && list.last == nullptr;
 }
 
@@ -56,7 +59,7 @@ UserAddress createUserElement(std::string username, std::string name, std::strin
   UserAddress new_user = new UserElement;
   new_user->info.username = username;
   new_user->info.name = name;
-  new_user->info.account_type = type;
+  new_user->info.type = type;
   new_user->next = nullptr;
   new_user->prev = nullptr;
   return new_user;
@@ -68,7 +71,7 @@ void setUserType(UserList& list, std::string username, std::string new_type) {
   if(doesUserExist(list, username)) {
     if(new_type == "free" || new_type == "premium") {
       user = searchUser(list, username);
-      user->info.account_type = new_type;
+      user->info.type = new_type;
     } else {
       // TODO: tampilkan pesan error 'new_type' tidak valid
     }
